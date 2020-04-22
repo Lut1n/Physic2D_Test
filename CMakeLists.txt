@@ -4,19 +4,21 @@ project(Physic2D_Test)
 
 set(SRCS
     main.cpp
-    physic_engine.cpp
-    physic_entity.cpp
-    math_intersection.cpp
-    math_geometry.cpp
-    math_vector.cpp
+    renderer.cpp
+    physics/physic_engine.cpp
+    physics/physic_entity.cpp
+    maths/math_intersection.cpp
+    maths/math_geometry.cpp
+    maths/math_vector.cpp
     )
 
 set(HEADERS
-    physic_engine.hpp
-    physic_entity.hpp
-    math_intersection.hpp
-    math_geometry.hpp
-    math_vector.hpp
+    renderer.hpp
+    physics/physic_engine.hpp
+    physics/physic_entity.hpp
+    maths/math_intersection.hpp
+    maths/math_geometry.hpp
+    maths/math_vector.hpp
     )
 
 add_executable(PhysicTest ${SRCS} ${HEADERS})
@@ -26,6 +28,7 @@ add_executable(PhysicTest ${SRCS} ${HEADERS})
 
 ## In most cases better set in the CMake cache
 # set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
+set(SFML_DIR "C:/SFML-2.5.1/lib/cmake/SFML")
 
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 

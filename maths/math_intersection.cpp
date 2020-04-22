@@ -55,11 +55,10 @@ bool getInsidePoints(const Polygon& p1, const Polygon& p2, Arr<Vec2>& out_p, Arr
     Vec2 prev2 = p1.vertices[p1.vertices.size()-2];
     for(auto ve : p1.vertices)
     {
-        if( inside(ve, p2) )
+        if( inside(prev, p2) )
         {
-            Vec2 resN = getNormal(prev,ve) + getNormal(prev2,prev);
-            resN *= 0.5f;
-            out_p.push_back(ve);
+            Vec2 resN = getNormal(prev2,prev) + getNormal(prev,ve); resN *= 0.5f;
+            out_p.push_back(prev);
             out_n.push_back( resN );
             hit = true;
         }
@@ -98,14 +97,14 @@ bool Circle2Line(const Circle& c, const Vec2& l1, const Vec2& l2, Arr<Vec2>& out
     
     float delta = c.radius*c.radius * dr2 - D*D;
     
-    const float EPSILON = 0.001;
+    const float EPSILON = 0.01;
     
     // if(delta < -EPSILON) // no intersection
     if(delta < 0.f)
     {
         return false;
     }
-    else // if(delta > EPSILON) // two intersections
+    else if(delta > EPSILON) // two intersections
     {
         float sqrtDelta = std::sqrt( delta );
         
@@ -147,6 +146,8 @@ bool Circle2Seg(const Circle& c, const Vec2& s1, const Vec2& s2, Arr<Vec2>& out_
     
     if( Circle2Line(c,l1,l2,local_res) )
     {
+        if(local_res.empty()) return false;
+
         Vec2 dif = l2-l1;
         Vec2 d = normalize(dif);
         float dist = len(dif);
@@ -210,6 +211,11 @@ bool Seg2Seg(const Vec2& s1a, const Vec2& s1b, const Vec2& s2a, const Vec2& s2b,
             return true;
         }
     }
+    // test degenerated case (parallel segment very closed)
+    // else if()
+    // {
+    //
+    // }
     
     return false;
 }
@@ -242,11 +248,11 @@ bool inside(const Vec2& v, const Polygon& p)
 {
     if( p.vertices.empty() ) return false;
     
-    bool res = false;
+    bool res = true;
     Vec2 prev = p.vertices[p.vertices.size()-1];
     for(auto ve : p.vertices)
     {
-        res &= !above(v,prev,ve);
+        res &= above(v,prev,ve);
         prev = ve;
     }
     

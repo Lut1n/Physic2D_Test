@@ -1,5 +1,5 @@
 #include "physic_entity.hpp"
-#include "math_intersection.hpp"
+#include "../maths/math_intersection.hpp"
 
 // --------------------------------------------------------------------------
 Entity::Entity(Vec2 p, float m, float r, float f)
@@ -180,9 +180,16 @@ bool Rect2Rect(const RectEntity& r1, const RectEntity& r2, CollisionData& res)
     
     if( Poly2Poly(r1, r2, res_p, res_n1, res_n2) )
     {
+        if(res_p.empty()) return false;
+
         Vec2 hitPoint = averagePosition(res_p);
-        Vec2 n1 = averageNormal(res_n1);
-        Vec2 n2 = averageNormal(res_n2);
+        Vec2 n1,n2;
+        if(!res_n1.empty()) n1 = averageNormal(res_n1);
+        else n1 = normalize(hitPoint - r1.position);
+        if(!res_n2.empty()) n2 = averageNormal(res_n2);
+        else n2 = normalize(hitPoint - r2.position);
+        // Vec2 n1 = averageNormal(res_n1);
+        // Vec2 n2 = averageNormal(res_n2);
         
         res.e1 = const_cast<RectEntity*>( &r1 );
         res.e2 = const_cast<RectEntity*>( &r2 );
@@ -210,8 +217,12 @@ bool Circle2Rect(const CircleEntity& c, const RectEntity& r, CollisionData& res)
     Arr<Vec2> colli_p, colli_n;
     if( Circle2Poly(c, r, colli_p, colli_n) )
     {
+        if(colli_p.empty()) return false;
+
         Vec2 hitPoint = averagePosition(colli_p);
-        Vec2 r_normal = averageNormal(colli_n);
+        Vec2 r_normal;
+        if(!colli_n.empty()) r_normal = averageNormal(colli_n);
+        else r_normal = normalize(r.position - c.position);
         
         Vec2 ck = hitPoint - c.position;
         Vec2 rk = hitPoint - r.position;

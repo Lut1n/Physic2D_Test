@@ -3,7 +3,7 @@
 #include <iostream>
 
 #define GRAVITY 9.80665
-#define PIXEL_PER_METER 10
+#define PIXEL_PER_METER 2
 
 // --------------------------------------------------------------------------
 PhysicEngine::PhysicEngine()
@@ -47,7 +47,7 @@ void PhysicEngine::resolvePenetration(CollisionData& collision)
     float ratio1 = e1.mass / massTT;
     float ratio2 = e2.mass / massTT;
 
-    const float EPSILON = 0.1;
+    const float EPSILON = 0.02;
     float correction = (float)collision.penetration * (1.0+EPSILON);
 
     e1.position += collision.normal2 * correction * ratio1;

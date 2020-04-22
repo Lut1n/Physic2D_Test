@@ -1,7 +1,7 @@
 #ifndef PHYSIC_ENTITY_HPP
 #define PHYSIC_ENTITY_HPP
 
-#include "math_geometry.hpp"
+#include "../maths/math_geometry.hpp"
 
 
 // --------------------------------------------------------------------------
